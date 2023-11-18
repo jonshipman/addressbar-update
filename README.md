@@ -1,38 +1,28 @@
-# create-svelte
+Code is in src/routes/+page.svelte
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
-
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
 ```
+    <script lang="ts">
+        import { browser } from '$app/environment';
+        import { goto } from '$app/navigation';
 
-## Developing
+        let searchTerm = '';
+        let input: HTMLInputElement;
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+        $: browser && updateAddressBar(searchTerm);
 
-```bash
-npm run dev
+        function updateAddressBar(s: string) {
+            setTimeout(() => {
+                goto(`?q=${s}`).then(handleFocus);
+            });
+        }
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+        function handleFocus() {
+            setTimeout(() => {
+                input.focus();
+                input.setSelectionRange(1000, 1000);
+            });
+        }
+    </script>
+
+    <input bind:value={searchTerm} bind:this={input} />
 ```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
